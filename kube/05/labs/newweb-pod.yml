@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: namespace
+metadata:
+  name: prodns
+
+
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: myweb
+  namespace: prodns
+spec:
+  containers:
+    - name: mynigx2
+      image: kokoball8686/mynginx
+      ports:
+        - containerPort: 80
+      requests:
+        cpu: 1
+        mem: 1Gi
