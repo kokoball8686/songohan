@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homepay-ingress
+spec:
+	ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: home-service
+            port:
+              number: 80
+      - pathType: Prefix
+        path: /pay
+        backend:
+          service:
+            name: pay-service
+            port:
+              number: 8080

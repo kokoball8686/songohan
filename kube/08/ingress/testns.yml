@@ -1,0 +1,176 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: testns
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: home-deploy
+  namespace: testns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: home
+  template:
+    metadata:
+      name: home-pod
+      labels:
+        name: home
+    spec:
+      containers:
+      - name: home-container
+        image: httpd
+        ports:
+        - containerPort: 80
+
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: home-service
+  namespace: testns
+spec:
+  type: ClusterIP
+  # clusterIP: 10.100.10.10
+  selector:
+    name: home
+  ports:
+    - port: 80
+      targetPort: 80
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: pay-deploy
+  namespace: testns
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pay
+  template:
+    metadata:
+      name: pay-pod
+      labels:
+        app: pay
+    spec:
+      containers:
+      - name: pod-container
+        image: whatwant/node-web:2.0
+        ports:
+        - containerPort: 8080
+
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: pay-service
+  namespace: testns
+spec:
+  type: ClusterIP
+  # clusterIP: 10.100.10.10
+  selector:
+    app: pay
+  ports:
+  - port: 80
+    targetPort: 8080
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homepay-ingress
+  namespace: testns
+# annotations:
+#   ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  ingressClassName: nginx     	# anonotations 관련 정보가 deprecated 되어서 대신 설정한다.
+  rules:                      	# kubectl get ingressclass -> nginx
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: home-service
+            port:
+              number: 80
+      - path: /pay
+        pathType: Prefix
+        backend:
+          service: 
+            name: pay-service
+            port:
+              number: 80
+              
+
