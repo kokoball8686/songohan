@@ -20,4 +20,5 @@ spec:
           service:
             name: pay-service
             port:
-              number: 8080
+              number: 80
+              

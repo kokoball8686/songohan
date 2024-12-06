@@ -1,0 +1,21 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: mysanta
+spec:
+  containers:
+  - name: mysanta-container
+    image: nginx:1.15
+    ports:
+    - containerPort: 80
+    volumeMounts:
+      - name: mywebpage
+        mountPath: "/usr/share/nginx/html"
+        readOnly: true
+
+
+  volumes:
+    - name: mywebpage
+      configMap:
+        name: myindex
