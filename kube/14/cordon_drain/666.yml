@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tensorflow-pod
+  labels:
+    app: ten
+spec:
+  containers:
+  - name: nginx
+    image: tensorflow/tensorflow:nightly-jupyter
+  nodeSelector:
+    disktype: ssd
+    gpu: "true"
+
+
